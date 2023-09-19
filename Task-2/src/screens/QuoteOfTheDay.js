@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import axios from 'axios';
 import QuoteCard from '../components/quoteCard';
-
 
 const QuoteOfTheDay = () => {
   const [quotes, setQuotes] = useState([]);
@@ -20,7 +19,14 @@ const QuoteOfTheDay = () => {
   };
 
   useEffect(() => {
-    fetchQuotes();
+    axios.get('https://type.fit/api/quotes')
+    .then((response) => {
+      setQuotes(response.data);
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.error('Error fetching quotes:', error);
+    });
   }, []);
 
   return (
@@ -32,7 +38,6 @@ const QuoteOfTheDay = () => {
           author={quoteData.author}
         />
       ))}
-      <Button title="Refresh" onPress={() => fetchQuotes()} />
     </ScrollView>
   );
 };
